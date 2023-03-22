@@ -1,0 +1,11 @@
+cmake_minimum_required(VERSION 3.16)
+project(sitecrawler LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+find_package(Qt5Location CONFIG REQUIRED)
+find_package(Qt5Positioning CONFIG REQUIRED)
+find_package(Qt5Quick CONFIG REQUIRED)
+find_package(Qt5QuickControls2 CONFIG REQUIRED)
+add_subdirectory(application)
+add_subdirectory(components)
