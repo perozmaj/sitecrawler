@@ -25,4 +25,6 @@ private:
     QNetworkAccessManager m_networkAccessManager;
     std::string m_currentUrl;
     std::vector<std::string> m_visitedUrls;
+    QString m_regularExpressionString = {"<a\\s+(?:[^>]*?\\s+)?href=\"([^\"]*)\""};
+    void findLinksAndAddToQueue(const QString& data);
 };

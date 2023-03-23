@@ -1,7 +1,6 @@
 import QtQuick 2.5
 import QtQuick.Controls 2.3
 ApplicationWindow {
-    //title of the application
     id: root
     title: qsTr("Crawler Demo")
     width: 800
@@ -38,6 +37,7 @@ ApplicationWindow {
         {
             anchors.fill: parent
             text: "crawl"
+            enabled: !siteCrawlerModel.isCrawling
             onClicked:
             {
                 siteCrawlerModel.crawlClicked(buttonTextInput.text)
@@ -72,7 +72,6 @@ ApplicationWindow {
                 {
                     console.log(model.data)
                 }
-
             }
         }
     }

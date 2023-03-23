@@ -1,6 +1,5 @@
 #include "SiteCrawlerModel.h"
 #include "SiteCrawler.h"
-#include <iostream>
 SiteCrawlerModel::SiteCrawlerModel(QObject* parent) :
     QStandardItemModel(parent)
 {
@@ -17,14 +16,15 @@ QHash<int, QByteArray> SiteCrawlerModel::roleNames() const
 
 void SiteCrawlerModel::crawlClicked(const QString& url)
 {
-    std::cout << "Received url " << url.toStdString() << std::endl;
-    auto* siteCrawler = new SiteCrawler(url);
-    connect(siteCrawler, &SiteCrawler::linkVisited, this, &SiteCrawlerModel::siteVisited);
+    m_isCrawling = true;
+    emit isCrawlingChanged();
+    auto* siteCrawler = new SiteCrawler(url, this);
+    connect(siteCrawler, &SiteCrawler::linkVisited, this, &SiteCrawlerModel::linkVisited);
     connect(siteCrawler, &SiteCrawler::finished, this, &SiteCrawlerModel::crawlFinished);
-    //handle deletion on finished
+    connect(siteCrawler, &SiteCrawler::finished, siteCrawler, &QObject::deleteLater);
 }
 
-void SiteCrawlerModel::siteVisited(const QString& link, const QString& data)
+void SiteCrawlerModel::linkVisited(const QString& link, const QString& data)
 {
     auto* pItem = new QStandardItem();
     pItem->setData(link, Roles::LinkRole);
@@ -34,5 +34,11 @@ void SiteCrawlerModel::siteVisited(const QString& link, const QString& data)
 
 void SiteCrawlerModel::crawlFinished()
 {
+    m_isCrawling = false;
+    emit isCrawlingChanged();
+}
 
+bool SiteCrawlerModel::getIsCrawling() const
+{
+    return m_isCrawling;
 }
